@@ -3,10 +3,15 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react()],
+
+  // GitHub Pages serwuje aplikację z /REPO_NAME/
+  // Zmienna VITE_BASE_PATH jest ustawiana w GitHub Actions workflow
+  // Lokalnie brak zmiennej = '/' (root)
+  base: process.env.VITE_BASE_PATH ?? '/',
+
   server: {
     proxy: {
-      // All /deezer/* requests get proxied to api.deezer.com
-      // This bypasses CORS because the request comes from the server, not the browser
+      // Proxy Deezer API lokalnie żeby obejść CORS
       '/deezer': {
         target: 'https://api.deezer.com',
         changeOrigin: true,
