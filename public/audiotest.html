@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Audio Test</title></head>
+<body style="background:#111;color:#fff;font-family:sans-serif;padding:2rem">
+<h2>Audio Test</h2>
+<p id="status">Kliknij przycisk</p>
+<button id="btn" style="padding:1rem 2rem;font-size:1rem;cursor:pointer">▶ Play</button>
+<br><br>
+<audio id="audio" controls style="width:100%;margin-top:1rem"></audio>
+
+<script>
+const PREVIEW_URL = 'https://cdnt-preview.dzcdn.net/api/1/1/1/a/a/0/1aa03536d01f9a5f4501473413a8c4c0.mp3?hdnea=exp=1792534067~acl=/api/1/1/1/a/a/0/1aa03536d01f9a5f4501473413a8c4c0.mp3*~data=user_id=0,application_id=42~hmac=93f9036a89547f6815c1f1676dde087505b605432da222db1b3ba1ed599055f5';
+
+const audio = document.getElementById('audio');
+const btn = document.getElementById('btn');
+const status = document.getElementById('status');
+
+audio.src = PREVIEW_URL;
+
+audio.addEventListener('canplay', () => status.textContent = '✓ canplay - gotowe');
+audio.addEventListener('playing', () => status.textContent = '✓ playing - GRA!');
+audio.addEventListener('error', (e) => status.textContent = '✗ error: ' + JSON.stringify(audio.error));
+audio.addEventListener('stalled', () => status.textContent = '⚠ stalled');
+audio.addEventListener('waiting', () => status.textContent = '⏳ waiting...');
+
+btn.onclick = () => {
+  status.textContent = 'Kliknięto — wywołuję play()...';
+  const p = audio.play();
+  if (p) {
+    p.then(() => status.textContent += ' → Promise resolved')
+     .catch(e => status.textContent += ' → Promise REJECTED: ' + e.message);
+  }
+};
+</script>
+</body>
+</html>
